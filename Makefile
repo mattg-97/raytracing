@@ -10,7 +10,7 @@ SRCS = $(shell find $(SRCDIR) -type f -name "*.c")
 # Generate corresponding .o file names
 OBJS = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 # Generate include directories
-INCLUDES = -I$(SRCDIR) $(shell find $(SRCDIR) -type d -exec echo -I{} \;) -I/Library/Frameworks/SDL2.framework/Headers -I/opt/homebrew/Cellar/raylib/5.5/include
+INCLUDES = -I$(SRCDIR) $(shell find $(SRCDIR) -type d -exec echo -I{} \;) -I/Library/Frameworks/SDL2.framework/Headers -Iincludes/raylib/include
 
 .PHONY: all clean run bear
 
@@ -18,7 +18,7 @@ all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	@mkdir -p $(BINDIR)
-	$(CC) $(CFLAGS) $^ -F/Library/Frameworks -framework SDL2 -Wl,-rpath,/Library/Frameworks -L/opt/homebrew/Cellar/raylib/5.5/lib -lraylib -o $@
+	$(CC) $(CFLAGS) $^ -F/Library/Frameworks -framework SDL2 -Wl,-rpath,/Library/Frameworks -Lincludes/raylib/lib -lraylib -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(@D)
