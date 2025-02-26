@@ -1,10 +1,10 @@
 #include "2d.h"
 
 
-void ray_cast(Circle circle, Ray rays[]) {
+void ray_cast(Circle circle, Ray_2D rays[]) {
     for (int i = 0; i < RAYS_NUMBER; i++) {
         double angle = ((double)i / RAYS_NUMBER) * 2 * M_PI;
-        Ray ray = (Ray){
+        Ray_2D ray = (Ray_2D){
             .x_start = circle.x,
             .angle = angle,
             .y_start = circle.y,
@@ -29,10 +29,10 @@ void fill_circle(SDL_Surface* surface, Circle circle, Uint32 colour) {
     }
 }
 
-void fill_rays(SDL_Surface* surface, Ray rays[RAYS_NUMBER], Uint32 colour, Circle object) {
+void fill_rays(SDL_Surface* surface, Ray_2D rays[RAYS_NUMBER], Uint32 colour, Circle object) {
     double radius_squared = pow(object.radius, 2);
     for (int i = 0; i < RAYS_NUMBER; i++) {
-        Ray ray = rays[i];
+        Ray_2D ray = rays[i];
         int end_of_screen = 0;
         int object_hit = 0;
         double step = 1;
@@ -57,13 +57,19 @@ void fill_rays(SDL_Surface* surface, Ray rays[RAYS_NUMBER], Uint32 colour, Circl
     }
 }
 
-int run_2d(SDL_Window* window) {
+int run_2d() {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        fprintf(stderr, "SDL Init failed: %s\n", SDL_GetError());
+        return EXIT_FAILURE;
+    }
+    SDL_Window *window = SDL_CreateWindow("Raytracing", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
+
     SDL_Surface *surface = SDL_GetWindowSurface(window);
     SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0, 0, 0));
     Circle circle = (Circle){.x = 500, .y = 500, .radius = 50};
     Circle shadow_circle = (Circle){.x = 550, .y = 300, .radius = 120};
     
-    Ray rays[RAYS_NUMBER];
+    Ray_2D rays[RAYS_NUMBER];
     ray_cast(circle, rays);
     int obstacle_speed = 1;
 

@@ -20,8 +20,8 @@ typedef struct {
     double x_start, y_start;
     double angle;
     double x_end, y_end;
-} Ray;
+} Ray_2D;
 
-int run_2d(SDL_Window* window);
+int run_2d(void);
 
 #endif
